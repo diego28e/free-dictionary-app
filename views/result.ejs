@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playwrite+DE+Grund:wght@100..400&display=swap"
+      rel="stylesheet"
+    />
+    <title>Dictionary App</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #23376a;
+      }
+
+      h1 {
+        text-align: center;
+        font-family: "Teko", sans-serif;
+        font-size: 4rem;
+        color: #66dae0;
+        display: inline-flex;
+      }
+
+      h2 {
+        font-family: "Teko", sans-serif;
+        font-weight: bold;
+        font-size: 2rem;
+        text-transform: uppercase;
+        color: #23376a;
+      }
+
+      form {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input {
+        padding: 10px;
+        font-size: 16px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+      }
+
+      .grammar-category {
+        font-family: "Teko", sans-serif;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #23376a;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      ul ul {
+        margin-left: 20px;
+      }
+
+      em {
+        color: #555;
+      }
+
+      .example {
+        font-weight: bold;
+      }
+
+      .pronunciation-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .pronunciation {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 0 6px #23376a;
+        padding: 1rem;
+        flex-direction: column;
+      }
+      .header {
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header a {
+        color: #fff;
+        padding: 1.2rem;
+        text-decoration: none;
+      }
+
+      .meaning {
+        padding: 1rem;
+        box-shadow: 0 0 5px #23376a;
+        margin: 5px;
+      }
+
+      @media (max-width: 750px) {
+        .pronunciation-container {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="header">
+      <h1>Dictionary App</h1>
+      <a href="https://github.com/diego28e/diego28e" target="_blank"
+        >Developed by: Diego E</a
+      >
+      <form action="/dev/search" method="post">
+        <input type="text" name="word" placeholder="Enter a word" required />
+        <button type="submit">Search</button>
+      </form>
+    </section>
+    <div class="result">
+      <% if (wordData) { %>
+      <h2><%= wordData.word %></h2>
+      <div class="pronunciation-container">
+        <% if (wordData.phonetics.length > 0) { %> <%
+        wordData.phonetics.forEach(phonetic => { %> <% if (phonetic.text ||
+        phonetic.audio) { %>
+        <div class="pronunciation">
+          <% if (phonetic.text) { %>
+          <p>Phonetic Transcription: <%= phonetic.text %></p>
+          <% } %> <% if (phonetic.audio) { %>
+          <audio controls>
+            <source src="<%= phonetic.audio %>" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+          <% } %>
+        </div>
+        <% } %> <% }) %> <% } %>
+      </div>
+      <h3>Meanings:</h3>
+      <ul>
+        <% wordData.meanings.forEach(meaning => { %>
+        <li class="meaning">
+          <strong class="grammar-category"><%= meaning.partOfSpeech %>:</strong>
+          <ol>
+            <% meaning.definitions.forEach(def => { %>
+            <li>
+              <p><%= def.definition %></p>
+              <% if (def.example) { %>
+              <p>
+                <em
+                  ><span class="example">Example:</span> <%= def.example %></em
+                >
+              </p>
+              <% } %>
+            </li>
+            <% }) %>
+          </ol>
+        </li>
+        <% }) %>
+      </ul>
+      <% } else { %>
+      <p><%= error %></p>
+      <% } %>
+    </div>
+  </body>
+</html>

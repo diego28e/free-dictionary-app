@@ -1,0 +1,38 @@
+# Welcome to Serverless!
+
+service: dictionary-app
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: dev
+  profile: dalejo
+
+functions:
+  app:
+    handler: app.handler
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: search
+          method: post
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    noPrependStageInUrl: true
+
+package:
+  include:
+    - app.js
+    - views/**
+    - public/**
+    - node_modules/**
+  exclude:
+    - node_modules/aws-sdk/**
